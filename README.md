@@ -24,7 +24,7 @@
     1. Model based on [Tensorflow-hub](https://www.tensorflow.org/hub)
     1. Tansfer Learning based on text materials from poet
 1. Model (Tensorflow, LSTMCell)
-    1. ~~Structure
+    1. ~~Structure~~
         1. [x]Input Function
             1. Word
         1. Embedding
@@ -40,18 +40,29 @@
             1. Output Shape shall be the size of dictionary
     1. Variables initialization
     1. Train (Cell based)
-        1. Loss
         1. For-loop as Steps
-            1. Initialize States for LSTM Cell
-            1. Initialize input for LSTM Cell
+            1. [x]Initialize States for LSTM Cell
             1. For-loop for time step
-                1. Input
-                1. State
-                1. LSTM cell
-                1. Dense
-                1. Calculate State
-                1. Calculate y_hat as next input
+                1. Input - batch with padding/mask
+                    1. Shape
+                        1. [Batch_size, Sequence_length, Embedding_Size]
+                    1. ~~`tf.pad`~~
+                        1. Should pad until the longest sequence end in the batch
+                        1. Pad at when D=1 after the sequence
+                        1. Question: How to ensure the padded will have the same sequence_length?
+                    1. [tf.keras.preprocessing.sequence.pad_sequences](https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/sequence/pad_sequences)
+                        1. Need to convert words back to indices
+                    1. [tf.nn.dynamic_rnn](https://www.tensorflow.org/api_docs/python/tf/nn/dynamic_rnn)
+                        1. Input as placeholder with shape [Batch_size, Max_length, Embedding_Size]
+                        1. So input should be initialize as all zeros? then fill with data?
+                    1. [x]Or `Batch_size` = 1
+                1. [x]State
+                1. [x]LSTM cell
+                1. [x]Dense
+                1. [x]Calculate State
                 1. Calculate Loss
+        1. Loss
+        1. Train_Ops
     1. Sampling
         1. Initialize States for LSTM Cell
         1. Initialize input for LSTM Cell 
@@ -65,6 +76,9 @@
             1. Calculate State
             1. Calculate y_hat as next input
             1. Print y_hat
+    1. TODO 
+        1. BidirectionalLSTM
+        1. GRU
 1. Model (TF Estimator)
     1. Data input label will be series of vectors as indices from the dictionary
     1. Sentence go through text_feature_columns from tf hub
@@ -75,5 +89,7 @@
     1. `xxxnewlinexxx` means new line
     1. Every line in the txt file is one sonnet
 1. Poems
+## Note
+1. Build Graph first
 ## Reference
 1. https://www.tensorflow.org/tutorials/text_classification_with_tf_hub
